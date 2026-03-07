@@ -37,41 +37,30 @@ A modern, responsive, and interactive multi-step checkout flow built with **Next
 ```
 ecoyaan-checkout/
 ├── app/
-│   ├── api/
-│   │   └── (API routes - if any)
-│   ├── checkout-client.tsx      # Main checkout orchestrator
 │   ├── globals.css              # Global styles & animations
-│   ├── layout.tsx               # Root layout with metadata
+│   ├── layout.tsx               # Root layout with fonts
 │   └── page.tsx                 # Home page entry point
 ├── components/
 │   ├── CartScreen.tsx           # Step 1: Display cart items & totals
 │   ├── CartSummary.tsx          # Reusable order summary component
+│   ├── CheckoutFlow.tsx         # Main checkout orchestrator
 │   ├── PaymentScreen.tsx        # Step 3: Payment method selection
 │   ├── ShippingScreen.tsx       # Step 2: Address form with validation
-│   ├── StepIndicator.tsx        # Visual progress bar showing current step
+│   ├── StepIndicator.tsx        # Visual progress bar
 │   └── SuccessScreen.tsx        # Step 4: Order confirmation & tracking
-├── data/
-│   └── mockData.ts              # Mock product data
-├── hooks/
-│   └── use-mobile.ts            # Mobile detection hook
-├── lib/
-│   └── utils.ts                 # Utility functions
 ├── store/
 │   └── checkoutStore.ts         # Zustand store for global state
 ├── utils/
 │   └── validation.ts            # Form validation functions
 ├── .eslintrc.json               # ESLint configuration
 ├── .gitignore                   # Git ignore rules
-├── eslint.config.mjs            # ESLint config (modern)
 ├── metadata.json                # Metadata for app
 ├── next.config.ts               # Next.js configuration
-├── next-env.d.ts                # TypeScript environment definitions
 ├── package.json                 # Project dependencies
-├── package-lock.json            # Locked versions
-├── postcss.config.mjs            # PostCSS configuration for Tailwind
+├── postcss.config.mjs           # PostCSS configuration
 ├── README.md                    # This file
 ├── tailwind.config.ts           # Tailwind CSS configuration
-└── tsconfig.json                # TypeScript configuration
+└── tsconfig.json                # TypeScript configuration        # TypeScript configuration
 ```
 
 ## 🚀 Getting Started
