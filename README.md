@@ -208,8 +208,8 @@ const useCheckoutStore = create((set) => ({
 
 ## 🔗 Links
 
-- **GitHub Repository**: https://github.com/YOUR_USERNAME/ecoyaan-checkout
-- **Live Demo**: https://ecoyaan-checkout.vercel.app
+- **GitHub Repository**: https://github.com/FaizzE/ecoyaan-checkout
+- **Live Demo**: https://ecoyaan-checkout-assignment.vercel.app/
 - **Assignment**: Ecoyaan Frontend Engineering Interview Task
 
 
