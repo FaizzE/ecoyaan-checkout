@@ -1,0 +1,5 @@
+{
+  "name": "Ecoyaan Checkout",
+  "description": "A complete, production-ready checkout flow for Ecoyaan using Next.js, Zustand, and Tailwind CSS.",
+  "requestFramePermissions": []
+}
