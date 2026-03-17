@@ -26,10 +26,16 @@ const useCartCalculations = (items: CartItemType[]) => {
   }, [items]);
 };
 
+import { Heart, Copy, Trash2, Minus, Plus } from 'lucide-react';
+
 // Custom Cart Item Component
 const CartItem = ({ item }: { item: CartItemType }) => (
-  <div className="flex flex-col sm:flex-row gap-6 p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors items-center sm:items-start">
-    <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100 shadow-sm">
+  <div className="flex gap-4 p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+    <div className="flex items-center">
+      <input type="checkbox" className="w-5 h-5 accent-eco-600 rounded border-gray-300" defaultChecked />
+    </div>
+    
+    <div className="relative w-28 h-28 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100 shadow-sm">
       <Image 
         src={item.image} 
         alt={item.product_name} 
@@ -38,21 +44,42 @@ const CartItem = ({ item }: { item: CartItemType }) => (
         referrerPolicy="no-referrer"
       />
     </div>
-    <div className="flex-1 text-center sm:text-left">
-      <h3 className="font-bold text-lg text-gray-900">
-        {item.product_name}
-      </h3>
-      <p className="text-eco-600 font-semibold mt-1">
-        ₹{item.product_price.toLocaleString('en-IN')} each
+    
+    <div className="flex-1">
+      <div className="flex justify-between items-start">
+        <h3 className="font-bold text-lg text-gray-900">
+          {item.product_name}
+        </h3>
+        <div className="flex gap-3 text-gray-400">
+          <Heart size={20} className="hover:text-red-500 cursor-pointer" />
+          <Copy size={20} className="hover:text-eco-600 cursor-pointer" />
+          <Trash2 size={20} className="hover:text-red-600 cursor-pointer" />
+        </div>
+      </div>
+      
+      <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+        Introducing our premium {item.product_name}, handcrafted with natural ingredients for the best experience.
       </p>
-      <p className="text-sm text-gray-600 mt-2">
-        Quantity: <span className="font-bold text-gray-900">{item.quantity}</span>
-      </p>
-    </div>
-    <div className="text-center sm:text-right mt-4 sm:mt-0">
-      <p className="text-2xl font-bold text-eco-600">
-        ₹{(item.product_price * item.quantity).toLocaleString('en-IN')}
-      </p>
+      
+      <div className="flex items-center gap-3 mt-3">
+        <span className="font-bold text-lg text-gray-900">₹{item.product_price.toLocaleString('en-IN')}</span>
+        <span className="text-sm text-gray-400 line-through">₹{(item.product_price + 75).toLocaleString('en-IN')}</span>
+        <span className="text-sm font-semibold text-eco-600">You Save ₹75</span>
+      </div>
+      
+      <div className="flex justify-between items-center mt-4">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-medium text-gray-700">Qty:</span>
+          <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+            <button className="p-2 hover:bg-gray-100"><Minus size={16} /></button>
+            <span className="px-4 font-bold">{item.quantity}</span>
+            <button className="p-2 hover:bg-gray-100"><Plus size={16} /></button>
+          </div>
+        </div>
+        <button className="text-sm text-eco-600 font-semibold hover:underline">
+          Save for later
+        </button>
+      </div>
     </div>
   </div>
 );
