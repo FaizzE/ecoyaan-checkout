@@ -5,7 +5,7 @@ import { useCheckoutStore } from '@/store/checkoutStore';
 import { validateAddressForm } from '@/utils/validation';
 import { motion } from 'motion/react';
 import CartSummary from './CartSummary';
-import { ArrowLeft, ArrowRight, Loader2 } from 'lucide-react';
+import { StickyActionButtons } from './StickyActionButtons';
 
 // Custom Input Component for enhanced styling
 const CustomInput = ({ label, error, value, onChange, required, ...props }: any) => (
@@ -37,31 +37,30 @@ const CustomInput = ({ label, error, value, onChange, required, ...props }: any)
 );
 
 export default function ShippingScreen() {
-  const { shippingAddress, updateAddress, setCurrentStep } = useCheckoutStore();
+  const { shippingAddress, updateAddress, setCurrentStep, savedAddresses, addAddress, selectAddress, selectedAddressId } = useCheckoutStore();
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isValidating, setIsValidating] = useState(false);
+  const [saveAddress, setSaveAddress] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     updateAddress({ [name]: value });
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleNext = async () => {
     setIsValidating(true);
-    
-    // Simulate validation delay for UX
     await new Promise(resolve => setTimeout(resolve, 600));
     
     const validation = validateAddressForm(shippingAddress);
     
     if (validation.isValid) {
+      if (saveAddress) {
+        addAddress(shippingAddress);
+      }
       setIsValidating(false);
       setCurrentStep('payment');
     } else {
@@ -75,13 +74,34 @@ export default function ShippingScreen() {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
-      className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+      className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-32"
     >
-      <div className="lg:col-span-2">
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-lg">
+      <div className="lg:col-span-2 space-y-8">
+        {/* Saved Addresses Section */}
+        {savedAddresses.length > 0 && (
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-soft">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Saved Addresses</h3>
+            <div className="space-y-3">
+              {savedAddresses.map((addr) => (
+                <div 
+                  key={addr.id}
+                  onClick={() => selectAddress(addr.id)}
+                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                    selectedAddressId === addr.id ? 'border-eco-500 bg-eco-50' : 'border-gray-100 hover:border-gray-200'
+                  }`}
+                >
+                  <p className="font-semibold">{addr.fullName}</p>
+                  <p className="text-sm text-gray-600">{addr.city}, {addr.state} - {addr.pinCode}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-soft">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Shipping Address</h2>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="sm:col-span-2">
                 <CustomInput
@@ -152,42 +172,29 @@ export default function ShippingScreen() {
               </div>
             </div>
 
-            <div className="flex flex-col-reverse sm:flex-row gap-4 pt-8 border-t border-gray-100 mt-8">
-              <button
-                type="button"
-                onClick={() => setCurrentStep('cart')}
-                disabled={isValidating}
-                className="w-full sm:w-1/2 py-4 px-6 rounded-xl border-2 border-gray-200 text-gray-700 font-bold hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-              >
-                <ArrowLeft size={20} />
-                Back to Cart
-              </button>
-              
-              <button
-                type="submit"
-                disabled={isValidating}
-                className="w-full sm:w-1/2 relative bg-eco-600 hover:bg-eco-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-2 group cursor-pointer disabled:opacity-75 disabled:cursor-wait disabled:hover:scale-100"
-              >
-                {isValidating ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <Loader2 className="animate-spin" size={20} />
-                    Validating...
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center gap-2">
-                    Continue to Payment
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </span>
-                )}
-              </button>
-            </div>
-          </form>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={saveAddress}
+                onChange={(e) => setSaveAddress(e.target.checked)}
+                className="w-5 h-5 accent-eco-600 rounded"
+              />
+              <span className="text-sm text-gray-700">Save this address for future use</span>
+            </label>
+          </div>
         </div>
       </div>
       
       <div className="lg:col-span-1">
         <CartSummary />
       </div>
+
+      <StickyActionButtons 
+        onBack={() => setCurrentStep('cart')}
+        onNext={handleNext}
+        isProcessing={isValidating}
+        nextLabel="Continue to Payment"
+      />
     </motion.div>
   );
 }

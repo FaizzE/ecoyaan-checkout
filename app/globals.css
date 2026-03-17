@@ -14,6 +14,16 @@
   --color-eco-900: #145231;
 }
 
+/* Custom Utilities */
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  }
+  .gradient-eco {
+    background: linear-gradient(135deg, var(--color-eco-500), var(--color-eco-700));
+  }
+}
+
 @keyframes slideInFromLeft {
   from {
     opacity: 0;

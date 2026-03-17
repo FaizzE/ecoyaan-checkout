@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useCheckoutStore, CartItem as CartItemType } from '@/store/checkoutStore';
 import { motion } from 'motion/react';
 import CartSummary from './CartSummary';
-import { ArrowRight } from 'lucide-react';
+import { StickyActionButtons } from './StickyActionButtons';
 import Image from 'next/image';
 
 // Custom hook for cart calculations
@@ -59,7 +59,6 @@ const CartItem = ({ item }: { item: CartItemType }) => (
 
 export default function CartScreen() {
   const { cartItems, setCurrentStep } = useCheckoutStore();
-  const { subtotal, shippingFee, loyaltyDiscount, total } = useCartCalculations(cartItems);
 
   const handleCheckout = () => {
     // Custom validation before proceeding
@@ -75,10 +74,10 @@ export default function CartScreen() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+      className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-32"
     >
       <div className="lg:col-span-2 space-y-6">
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-lg">
+        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-soft">
           <div className="p-6 border-b border-gray-100 bg-gray-50/50">
             <h2 className="text-2xl font-bold text-gray-900">
               Your Cart ({cartItems.length} items)
@@ -106,18 +105,13 @@ export default function CartScreen() {
       
       <div className="lg:col-span-1">
         <CartSummary />
-        
-        <button
-          onClick={handleCheckout}
-          disabled={cartItems.length === 0}
-          className="w-full mt-6 bg-eco-600 hover:bg-eco-700 disabled:opacity-50 
-                     text-white font-bold py-4 px-6 rounded-xl transition-all duration-300
-                     transform hover:scale-[1.02] shadow-lg flex items-center justify-center gap-2 group cursor-pointer"
-        >
-          Proceed to Checkout
-          <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-        </button>
       </div>
+
+      <StickyActionButtons 
+        onNext={handleCheckout}
+        isNextDisabled={cartItems.length === 0}
+        nextLabel="Proceed to Checkout"
+      />
     </motion.div>
   );
 }
